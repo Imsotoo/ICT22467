@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>คุณภาพน้ำ - ระบบจัดการฟาร์มกุ้ง</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <i class="fas fa-shrimp"></i>
+                <span>SHRIMP FARM</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="dashboard.html" class="nav-item"><i class="fas fa-home"></i> แดชบอร์ด</a></li>
+                <li><a href="pond.html" class="nav-item"><i class="fas fa-water"></i> จัดการบ่อ</a></li>
+                <li><a href="water.html" class="nav-item active"><i class="fas fa-tint"></i> คุณภาพน้ำ</a></li>
+                <li><a href="feeding.html" class="nav-item"><i class="fas fa-utensils"></i> ให้อาหาร</a></li>
+                <li><a href="growth.html" class="nav-item"><i class="fas fa-chart-line"></i> การเจริญเติบโต</a></li>
+            </ul>
+            <div class="user-info" onclick="logout()" style="cursor: pointer;">
+                <span id="display-username">Admin</span> <i class="fas fa-sign-out-alt"></i>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h1 class="page-title" style="margin-bottom: 0;"><i class="fas fa-microchip"></i> ประวัติคุณภาพน้ำ (IoT Real-time)</h1>
+            <span id="last-update" style="font-size: 0.85rem; color: #7f8c8d; background: #f8f9fa; padding: 5px 12px; border-radius: 20px; border: 1px solid #eee;">
+                <i class="fas fa-sync-alt fa-spin"></i> กำลังโหลด...
+            </span>
+        </div>
+
+        <div id="water-list">
+            <div class="card"><p style="text-align: center;">กำลังดึงข้อมูลล่าสุดจากฐานข้อมูล...</p></div>
+        </div>
+    </main>
+
+    <script>
+        const API_BASE = 'http://localhost:5000/api';
+
+        async function fetchWaterQuality() {
+            try {
+                const response = await fetch(`${API_BASE}/water-quality`);
+                const data = await response.json();
+                const container = document.getElementById('water-list');
+                container.innerHTML = '';
+
+                if (!data || data.length === 0) {
+                    container.innerHTML = '<div class="card"><p style="text-align: center; color: #999;">ไม่พบข้อมูลจากเซนเซอร์ในขณะนี้</p></div>';
+                    return;
+                }
+
+                data.forEach(item => {
+                    const ph = parseFloat(item.ph_level) || 0;
+                    const temp = parseFloat(item.temperature) || 0;
+                    const doVal = parseFloat(item.oxygen_level) || 0;
+                    
+                    // ตรรกะประเมินสถานะ
+                    let statusColor = '#10b981'; 
+                    let statusText = 'ปกติ';
+                    if (ph < 6.5 || ph > 8.5 || doVal < 4) {
+                        statusColor = '#ef4444';
+                        statusText = 'อันตราย';
+                    } else if (ph < 7.0 || ph > 8.2) {
+                        statusColor = '#f59e0b';
+                        statusText = 'เฝ้าระวัง';
+                    }
+
+                    // แสดงผลชื่อบ่อคู่กับรหัสเซนเซอร์
+                    const displayName = item.pond_name 
+                        ? `${item.pond_name} (${item.device_id})` 
+                        : `เซนเซอร์: ${item.device_id}`;
+
+                    container.innerHTML += `
+                        <div class="card" style="margin-bottom: 20px; border-left: 6px solid ${statusColor};">
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                                <div>
+                                    <h3 style="margin: 0; color: #2c3e50;"><i class="fas fa-water"></i> ${displayName}</h3>
+                                    <p style="font-size: 0.85rem; color: #95a5a6; margin-top: 5px;">
+                                        <i class="far fa-calendar-alt"></i> ${new Date(item.recorded_at).toLocaleDateString('th-TH')} 
+                                        <i class="far fa-clock" style="margin-left: 10px;"></i> ${new Date(item.recorded_at).toLocaleTimeString('th-TH')} น.
+                                    </p>
+                                </div>
+                                <span style="background: ${statusColor}15; color: ${statusColor}; padding: 4px 12px; border-radius: 15px; font-weight: bold; font-size: 0.8rem; border: 1px solid ${statusColor}44;">
+                                    ${statusText}
+                                </span>
+                            </div>
+                            
+                            <div style="margin-top: 15px; display: grid; grid-template-columns: repeat(3, 1fr); background: #fcfcfc; padding: 15px; border-radius: 10px; border: 1px solid #f0f0f0;">
+                                <div style="text-align: center;">
+                                    <div style="font-size: 0.75rem; color: #7f8c8d; text-transform: uppercase; margin-bottom: 5px;">pH Level</div>
+                                    <div style="font-size: 1.4rem; font-weight: bold; color: ${statusColor}">${ph.toFixed(2)}</div>
+                                </div>
+                                <div style="text-align: center; border-left: 1px solid #eee; border-right: 1px solid #eee;">
+                                    <div style="font-size: 0.75rem; color: #7f8c8d; text-transform: uppercase; margin-bottom: 5px;">Temp (°C)</div>
+                                    <div style="font-size: 1.4rem; font-weight: bold; color: #2c3e50;">${temp.toFixed(1)}°C</div>
+                                </div>
+                                <div style="text-align: center;">
+                                    <div style="font-size: 0.75rem; color: #7f8c8d; text-transform: uppercase; margin-bottom: 5px;">DO (mg/L)</div>
+                                    <div style="font-size: 1.4rem; font-weight: bold; color: #3498db;">${doVal.toFixed(1)}</div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+                document.getElementById('last-update').innerHTML = `<i class="fas fa-check-circle"></i> อัปเดตล่าสุด: ${new Date().toLocaleTimeString('th-TH')}`;
+            } catch (error) {
+                console.error('Fetch error:', error);
+                document.getElementById('last-update').innerHTML = `❌ ไม่สามารถเชื่อมต่อฐานข้อมูลได้`;
+            }
+        }
+
+        function logout() {
+            Swal.fire({
+                title: 'ยืนยันการออกจากระบบ?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'ตกลง',
+                cancelButtonText: 'ยกเลิก'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    localStorage.removeItem('currentUser');
+                    window.location.href = 'index.html';
+                }
+            });
+        }
+
+        // เริ่มต้นทำงาน
+        const currentUser = localStorage.getItem('currentUser') || 'Admin';
+        document.getElementById('display-username').innerText = currentUser;
+        
+        fetchWaterQuality();
+        // อัปเดตข้อมูลอัตโนมัติทุกๆ 10 วินาทีเพื่อให้เป็น Real-time
+        setInterval(fetchWaterQuality, 10000); 
+    </script>
+</body>
+</html>

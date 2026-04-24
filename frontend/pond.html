@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>จัดการบ่อ - ระบบจัดการฟาร์มกุ้ง</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* สไตล์เพิ่มเติมสำหรับหมายเลขบ่อ */
+        .pond-badge {
+            background: #2c3e50;
+            color: white;
+            padding: 2px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <i class="fas fa-shrimp"></i>
+                <span>SHRIMP FARM</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="dashboard.html" class="nav-item"><i class="fas fa-home"></i> แดชบอร์ด</a></li>
+                <li><a href="pond.html" class="nav-item active"><i class="fas fa-water"></i> จัดการบ่อ</a></li>
+                <li><a href="water.html" class="nav-item"><i class="fas fa-tint"></i> คุณภาพน้ำ</a></li>
+                <li><a href="feeding.html" class="nav-item"><i class="fas fa-utensils"></i> ให้อาหาร</a></li>
+                <li><a href="growth.html" class="nav-item"><i class="fas fa-chart-line"></i> การเจริญเติบโต</a></li>
+            </ul>
+            <div class="user-info" onclick="logout()" style="cursor: pointer;">
+                <span id="display-username">Admin</span> <i class="fas fa-sign-out-alt"></i>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h1 class="page-title" style="margin-bottom: 0;">จัดการบ่อเลี้ยง</h1>
+            <button class="btn-primary" onclick="openModal()">+ เพิ่มบ่อใหม่</button>
+        </div>
+        
+        <div class="stats-grid" id="pond-container">
+            <div class="card">
+                <p style="text-align: center; color: var(--text-sub);">กำลังโหลดข้อมูล...</p>
+            </div>
+        </div>
+    </main>
+
+    <div id="addPondModal" class="modal" style="display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5);">
+        <div class="modal-content" style="background: white; margin: 10% auto; padding: 30px; border-radius: 15px; width: 400px; box-shadow: 0 4px 20px rgba(0,0,0,0.2);">
+            <h2 style="margin-top: 0; color: var(--primary);">+ เพิ่มบ่อเลี้ยงใหม่</h2>
+            <hr style="margin-bottom: 20px; opacity: 0.2;">
+            
+            <label>ชื่อบ่อ:</label>
+            <input type="text" id="p_name" placeholder="เช่น บ่อที่ 4" style="width: 100%; padding: 10px; margin: 8px 0 20px; border: 1px solid #ddd; border-radius: 5px;">
+            
+            <label>จำนวนกุ้งเริ่มต้น (ตัว):</label>
+            <input type="number" id="p_count" placeholder="เช่น 5000" style="width: 100%; padding: 10px; margin: 8px 0 20px; border: 1px solid #ddd; border-radius: 5px;">
+            
+            <div style="display: flex; gap: 10px; justify-content: flex-end;">
+                <button class="btn-secondary" onclick="closeModal()" style="padding: 10px 20px; cursor: pointer; background: #eee; border: none; border-radius: 5px;">ยกเลิก</button>
+                <button class="btn-primary" onclick="savePond()" style="padding: 10px 20px; cursor: pointer; background: #2c3e50; color: white; border: none; border-radius: 5px;">บันทึกข้อมูล</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        const API_URL = 'http://localhost:5000/api/ponds'; 
+
+        // --- ระบบ Authentication ---
+        const currentUser = localStorage.getItem('user') || localStorage.getItem('currentUser') || 'Admin';
+        document.getElementById('display-username').innerText = currentUser;
+
+        function logout() {
+            if (confirm('คุณต้องการออกจากระบบใช่หรือไม่?')) {
+                localStorage.clear();
+                window.location.href = 'index.html';
+            }
+        }
+
+        // --- ระบบดึงข้อมูลบ่อมาแสดง (เพิ่มการโชว์ ID และตัดขนาดพื้นที่) ---
+        async function loadPonds() {
+            try {
+                const response = await fetch(API_URL);
+                const data = await response.json();
+                
+                const container = document.getElementById('pond-container');
+                container.innerHTML = '';
+
+                if (Array.isArray(data) && data.length > 0) {
+                    data.forEach(pond => {
+                        const pId = pond.pond_id || pond.id;
+                        const pName = pond.pond_name || pond.name || 'ไม่ระบุชื่อ';
+                        const pCount = pond.shrimp_count || 0;
+
+                        container.innerHTML += `
+                            <div class="card" style="position: relative;">
+                                <div class="pond-badge">ID: ${pId}</div>
+                                <button onclick="deletePond(${pId}, '${pName}')" 
+                                        style="position: absolute; top: 15px; right: 15px; color: #e74c3c; border: none; background: none; cursor: pointer; font-size: 0.9rem;">
+                                    <i class="fas fa-trash"></i> ลบ
+                                </button>
+                                <h2 style="margin: 5px 0 15px 0; color: #2c3e50;">${pName}</h2>
+                                <p style="font-size: 1.1rem;">
+                                    <i class="fas fa-shrimp" style="color: #3498db; margin-right: 5px;"></i> 
+                                    จำนวนกุ้ง: <strong>${Number(pCount).toLocaleString()}</strong> ตัว
+                                </p>
+                            </div>
+                        `;
+                    });
+                } else {
+                    container.innerHTML = `<div class="card" style="grid-column: 1/-1;"><p style="text-align: center; color: var(--text-sub);">ยังไม่มีข้อมูลบ่อเลี้ยง</p></div>`;
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('pond-container').innerHTML = `<p style="color:red; text-align:center;">เชื่อมต่อกับ Server ไม่ได้</p>`;
+            }
+        }
+
+        // --- ระบบ Modal ---
+        function openModal() {
+            document.getElementById('p_name').value = '';
+            document.getElementById('p_count').value = '';
+            document.getElementById('addPondModal').style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('addPondModal').style.display = 'none';
+        }
+
+        // --- ระบบบันทึกข้อมูล (ตัด area_size ออก) ---
+       async function savePond() {
+        const nameInput = document.getElementById('p_name').value.trim();
+        const countInput = document.getElementById('p_count').value;
+
+        if (!nameInput) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'กรุณากรอกชื่อบ่อ',
+                text: 'คุณยังไม่ได้ระบุชื่อบ่อเลี้ยงเลยครับ',
+                confirmButtonColor: '#2c3e50'
+            });
+            return;
+        }
+
+        const pondData = {
+            pond_name: nameInput,
+            shrimp_count: parseInt(countInput) || 0
+        };
+
+        try {
+            // แสดง Loading ขณะกำลังบันทึก
+            Swal.fire({
+                title: 'กำลังบันทึก...',
+                allowOutsideClick: false,
+                didOpen: () => { Swal.showLoading(); }
+            });
+
+            const response = await fetch(API_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(pondData)
+            });
+
+            if (response.ok) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'สำเร็จ!',
+                    text: 'เพิ่มบ่อเลี้ยงใหม่เรียบร้อยแล้ว',
+                    confirmButtonColor: '#2c3e50',
+                    timer: 2000
+                });
+                closeModal();
+                loadPonds();
+            } else {
+                throw new Error('บันทึกไม่สำเร็จ');
+            }
+        } catch (error) {
+            Swal.fire({
+                icon: 'error',
+                title: 'เกิดข้อผิดพลาด',
+                text: 'ไม่สามารถเชื่อมต่อกับ Server ได้',
+                confirmButtonColor: '#e74c3c'
+            });
+        }
+    }
+
+    // --- ระบบลบข้อมูล แบบใช้ SweetAlert2 ---
+    async function deletePond(id, name) {
+        const result = await Swal.fire({
+            title: 'ยืนยันการลบ?',
+            text: `คุณต้องการลบบ่อ "${name}" ใช่หรือไม่? ข้อมูลกุ้งจะหายทั้งหมด!`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#e74c3c',
+            cancelButtonColor: '#bdc3c7',
+            confirmButtonText: 'ใช่, ลบเลย!',
+            cancelButtonText: 'ยกเลิก'
+        });
+
+        if (result.isConfirmed) {
+            try {
+                const response = await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
+                if (response.ok) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'ลบแล้ว!',
+                        text: 'ข้อมูลบ่อถูกลบออกจากระบบแล้ว',
+                        timer: 1500,
+                        showConfirmButton: false
+                    });
+                    loadPonds(); 
+                } else {
+                    Swal.fire('ผิดพลาด!', 'ไม่สามารถลบข้อมูลได้', 'error');
+                }
+            } catch (error) {
+                Swal.fire('ผิดพลาด!', 'การเชื่อมต่อมีปัญหา', 'error');
+            }
+        }
+    }
+        window.onload = loadPonds;
+    </script>
+</body>
+</html>

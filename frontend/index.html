@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>เข้าสู่ระบบ - ระบบจัดการฟาร์มกุ้ง</title>
+    
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
+</head>
+<body class="login-page">
+
+    <div class="login-container">
+        <div class="login-card">
+            <div class="login-header">
+                <i class="fas fa-shrimp fa-3x"></i>
+                <h2>ระบบจัดการฟาร์มกุ้ง</h2>
+                <p style="color: #666; margin-top: 5px;">Giant Freshwater Prawn Farm</p>
+            </div>
+
+            <form id="loginForm" class="login-form">
+                <div class="form-group">
+                    <label for="email">อีเมล</label>
+                    <div class="input-icon">
+                        <i class="fas fa-envelope"></i>
+                        <input type="text" id="email" placeholder="your.email@example.com" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">รหัสผ่าน</label>
+                    <div class="input-icon">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="password" placeholder="••••••••" required>
+                    </div>
+                </div>
+
+                <div class="form-options" style="display: flex; justify-content: space-between; margin-bottom: 1.5rem; font-size: 0.85rem;">
+                    <label class="remember-me" style="cursor: pointer;">
+                        <input type="checkbox"> จำฉันไว้
+                    </label>
+                    <a href="#" class="forgot-pwd" style="color: #666; text-decoration: none;">ลืมรหัสผ่าน?</a>
+                </div>
+
+                <button type="submit" class="btn-login">เข้าสู่ระบบ</button>
+            </form>
+
+            <div class="login-footer">
+                ยังไม่มีบัญชี? <a href="register.html">สมัครสมาชิก</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="login.js"></script>
+</body>
+</html>

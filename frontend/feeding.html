@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ตารางให้อาหาร - ระบบจัดการฟาร์มกุ้ง</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <i class="fas fa-shrimp"></i>
+                <span>SHRIMP FARM</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="dashboard.html" class="nav-item"><i class="fas fa-home"></i> แดชบอร์ด</a></li>
+                <li><a href="pond.html" class="nav-item"><i class="fas fa-water"></i> จัดการบ่อ</a></li>
+                <li><a href="water.html" class="nav-item"><i class="fas fa-tint"></i> คุณภาพน้ำ</a></li>
+                <li><a href="feeding.html" class="nav-item active"><i class="fas fa-utensils"></i> ให้อาหาร</a></li>
+                <li><a href="growth.html" class="nav-item"><i class="fas fa-chart-line"></i> การเจริญเติบโต</a></li>
+            </ul>
+            <div class="user-info" onclick="logout()" style="cursor: pointer;">
+                <span id="display-username">Admin</span> <i class="fas fa-sign-out-alt"></i>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+            <div>
+                <h1 class="page-title" style="margin-bottom: 5px;">ตารางให้อาหาร</h1>
+                <p style="color: #666;">กำหนดเวลาและติดตามการให้อาหารกุ้งรายวัน</p>
+            </div>
+            <button class="btn-primary" onclick="toggleForm()">
+                <i class="fas fa-plus"></i> บันทึกการให้อาหาร
+            </button>
+        </div>
+
+        <div id="feeding-form" class="card" style="display: none; margin-bottom: 25px; border-top: 4px solid #27ae60;">
+            <h3 style="margin-bottom: 15px;">บันทึกข้อมูลการให้อาหาร</h3>
+            <form id="main-feeding-form" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+                <div>
+                    <label style="display: block; font-size: 0.9rem; font-weight: bold;">เลือกบ่อเลี้ยง</label>
+                    <select id="pond_id" required style="width: 100%; padding: 10px; border-radius: 5px; border: 1px solid #ddd;"></select>
+                </div>
+                <div>
+                    <label style="display: block; font-size: 0.9rem; font-weight: bold;">ปริมาณอาหาร (กรัม)</label>
+                    <input type="number" id="feed_amount" placeholder="ระบุจำนวนกรัม" required style="width: 100%; padding: 10px; border-radius: 5px; border: 1px solid #ddd;">
+                </div>
+                <div style="display: flex; align-items: flex-end; gap: 10px;">
+                    <button type="submit" class="btn-primary" style="flex: 1; padding: 11px;">บันทึก</button>
+                    <button type="button" onclick="toggleForm()" style="padding: 11px; background: #95a5a6; color: white; border: none; border-radius: 5px;">ยกเลิก</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="stats-grid" style="display: grid; grid-template-columns: 2fr 1fr; gap: 20px;">
+            <div class="card">
+                <h3 style="border-bottom: 1px solid #eee; padding-bottom: 10px;"><i class="far fa-calendar-check"></i> รายการให้อาหารวันนี้</h3>
+                <div id="feeding-log" style="margin-top: 10px;">
+                    <p style="text-align: center; color: #999; padding: 20px;">กำลังโหลดข้อมูล...</p>
+                </div>
+            </div>
+
+            <div class="card" style="text-align: center;">
+                <h3 style="margin-bottom: 10px;">ความสำเร็จวันนี้</h3>
+                <div style="margin: 20px 0;">
+                    <div id="success-percent" style="font-size: 3.5rem; font-weight: bold; color: #27ae60;">0%</div>
+                    <p id="success-detail" style="color: #7f8c8d; font-size: 0.9rem;">กำลังคำนวณ...</p>
+                </div>
+                <div style="background: #f1f5f9; height: 12px; border-radius: 6px; overflow: hidden;">
+                    <div id="success-bar" style="background: #27ae60; width: 0%; height: 100%; transition: 1s;"></div>
+                </div>
+                <p style="font-size: 0.75rem; color: #bdc3c7; margin-top: 10px;">*เป้าหมาย 4 รอบต่อวันต่อบ่อ</p>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const API_BASE = 'http://localhost:5000/api';
+
+        function toggleForm() {
+            const form = document.getElementById('feeding-form');
+            form.style.display = form.style.display === 'none' ? 'block' : 'none';
+        }
+
+        async function loadPonds() {
+            try {
+                const res = await fetch(`${API_BASE}/ponds`);
+                const ponds = await res.json();
+                const select = document.getElementById('pond_id');
+                select.innerHTML = ponds.map(p => `<option value="${p.pond_id}">${p.pond_name}</option>`).join('');
+                return ponds.length;
+            } catch (err) { return 0; }
+        }
+
+        document.getElementById('main-feeding-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const data = {
+                pond_id: document.getElementById('pond_id').value,
+                feed_amount: document.getElementById('feed_amount').value
+            };
+            try {
+                const response = await fetch(`${API_BASE}/feeding`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                if (response.ok) {
+                    Swal.fire('สำเร็จ', 'บันทึกการให้อาหารเรียบร้อย', 'success').then(() => location.reload());
+                }
+            } catch (err) { Swal.fire('ผิดพลาด', 'บันทึกไม่สำเร็จ', 'error'); }
+        });
+
+        async function loadFeedingData() {
+    const pondCount = await loadPonds();
+    
+    try {
+        const response = await fetch(`${API_BASE}/feeding`);
+        const data = await response.json();
+        const log = document.getElementById('feeding-log'); 
+        
+        // --- ส่วนที่แก้ไขให้ยืดหยุ่น (ลองเอา Filter ออกก่อนเพื่อให้เห็นข้อมูลแน่ๆ) ---
+        // ถ้าต้องการดูแค่ของวันนี้จริงๆ ให้ใช้: 
+        // const today = new Date().toLocaleDateString('en-CA');
+        // const displayData = data.filter(item => new Date(item.date_time).toLocaleDateString('en-CA') === today);
+        
+        // แต่ตอนนี้ผมแนะนำให้ "แสดงทั้งหมด" ไปก่อนเพื่อเช็คว่าระบบเชื่อมต่อได้ 100%
+        const displayData = data; 
+        // ------------------------------------------------------------------
+
+        if (!displayData || displayData.length === 0) {
+            log.innerHTML = '<div style="text-align: center; padding: 30px; color: #ccc;">ไม่พบข้อมูลการให้อาหาร</div>';
+            updateProgress(0, pondCount); // อัปเดต % เป็น 0
+        } else {
+            log.innerHTML = displayData.map(item => `
+                <div style="display: flex; justify-content: space-between; padding: 15px; border-bottom: 1px solid #f8f9fa;">
+                    <div>
+                        <strong>${item.pond_name || 'บ่อ '+item.pond_id}</strong>
+                    </div>
+                    <div style="font-weight: bold; color: #2e7d32;">${item.feed_amount} กรัม</div>
+                </div>
+            `).join('');
+            
+            updateProgress(displayData.length, pondCount); // ส่งไปคำนวณ %
+        }
+    } catch (err) { 
+        console.error("Load Error:", err);
+        document.getElementById('feeding-log').innerHTML = '<div style="color:red; text-align:center;">เกิดข้อผิดพลาดในการดึงข้อมูล</div>';
+    }
+}
+
+// แยกฟังก์ชันคำนวณ % ออกมาให้เรียกง่ายขึ้น
+function updateProgress(currentRounds, pondCount) {
+    const targetPerPond = 4;
+    const totalTarget = (pondCount || 1) * targetPerPond;
+    const percent = Math.min(Math.round((currentRounds / totalTarget) * 100), 100);
+
+    const percentEl = document.getElementById('success-percent');
+    const detailEl = document.getElementById('success-detail');
+    const barEl = document.getElementById('success-bar');
+
+    if (percentEl) percentEl.innerText = percent + '%';
+    if (detailEl) detailEl.innerText = `ให้อาหารแล้ว ${currentRounds} จากเป้าหมาย ${totalTarget} รอบ`;
+    if (barEl) barEl.style.width = percent + '%';
+}
+
+        loadFeedingData();
+
+        function logout() {
+            localStorage.removeItem('currentUser');
+            window.location.href = 'index.html';
+        }
+
+        const currentUser = localStorage.getItem('currentUser') || 'Admin';
+        document.getElementById('display-username').innerText = currentUser;
+    </script>
+</body>
+</html>

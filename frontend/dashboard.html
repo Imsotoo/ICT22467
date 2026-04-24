@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ระบบจัดการฟาร์มกุ้ง - Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .user-info {
+            cursor: pointer;
+            padding: 5px 10px;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+        .user-info:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <i class="fas fa-shrimp"></i>
+                <span>SHRIMP FARM</span>
+            </div>
+            
+            <ul class="nav-links">
+                <li><a href="dashboard.html" class="nav-item active"><i class="fas fa-home"></i> แดชบอร์ด</a></li>
+                <li><a href="pond.html" class="nav-item"><i class="fas fa-water"></i> จัดการบ่อ</a></li>
+                <li><a href="water.html" class="nav-item"><i class="fas fa-tint"></i> คุณภาพน้ำ</a></li>
+                <li><a href="feeding.html" class="nav-item"><i class="fas fa-utensils"></i> ให้อาหาร</a></li>
+                <li><a href="growth.html" class="nav-item"><i class="fas fa-chart-line"></i> การเจริญเติบโต</a></li>
+            </ul>
+
+            <div class="user-info" onclick="logout()">
+                <span id="display-username">Admin</span> <i class="fas fa-sign-out-alt"></i>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container">
+        <h1 class="page-title">ภาพรวมระบบ</h1>
+        
+        <div class="stats-grid">
+            <div class="card">
+                <h3>จำนวนบ่อทั้งหมด</h3>
+                <div id="ponds" class="value">...</div>
+            </div>
+            <div class="card">
+                <h3>กุ้งทั้งหมดในระบบ</h3>
+                <div id="shrimp" class="value">...</div>
+            </div>
+            <div class="card">
+                <h3>น้ำหนักเฉลี่ย (กรัม)</h3>
+                <div id="weight" class="value">...</div>
+            </div>
+            <div class="card">
+                <h3>สถานะภาพรวม</h3>
+                <div id="status" class="value status-badge">ปกติ</div>
+            </div>
+        </div>
+    </main>
+
+    <script src="script.js"></script>
+    
+    <script>
+        // 1. ดึงชื่อผู้ใช้จาก localStorage มาแสดง
+        const currentUser = localStorage.getItem('currentUser') || 'Admin';
+        document.getElementById('display-username').innerText = currentUser;
+
+        // 2. ฟังก์ชัน Logout
+        function logout() {
+            if (confirm('คุณต้องการออกจากระบบใช่หรือไม่?')) {
+                // ล้างข้อมูล Session ในเครื่อง
+                localStorage.removeItem('currentUser');
+                // ถอยกลับไปหน้า Login (index.html)
+                window.location.href = 'index.html';
+            }
+        }
+    </script>
+</body>
+</html>
