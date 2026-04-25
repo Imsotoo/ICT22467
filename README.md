@@ -58,8 +58,8 @@ ict22467/
 
 ### ✅ สิ่งที่ต้องมีก่อน
 
-- [Docker Desktop](https://www.docker.com/products/docker-desktop/) (สำหรับรันเซิร์ฟเวอร์จำลอง)
-- Git สำหรับดึงโค้ด
+- [Docker Desktop](https://www.docker.com/products/docker-desktop/)
+- [Git](https://git-scm.com/)
 
 ---
 
@@ -133,8 +133,9 @@ docker run -p 5000:5000 shrimp-backend
 
 ## 👥 ทีมพัฒนา (Development Team)
 โปรเจกต์นี้เป็นส่วนหนึ่งของวิชา ICT22467 - ระบบปฏิบัติการ (Operating System) * มหาวิทยาลัยศรีปทุม (Sripatum University)
-> 67112987 ณัฐภัทร เอิบอาบ
+| รหัสนักศึกษา | ชื่อ |
+| :--- | :--- |
+| 67112987 | ณัฐภัทร เอิบอาบ|
+| 67121979 | วัชรศักดิ์ ดั่นเจริญ |
+| 67143655 | เมธวิน วันริโก |
 
-> 67121979 วัชรศักดิ์ ดั่นเจริญ
-
-> 67143655 เมธวิน วันริโก 
