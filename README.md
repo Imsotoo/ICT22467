@@ -64,6 +64,37 @@ docker build -t shrimp-backend .
 docker run -p 5000:5000 shrimp-backend
 ```
 ---
+## 📁 โครงสร้างโปรเจกต์
+ 
+```
+ict22467/
+├── backend/
+│   ├── server.js        # Express API server
+│   ├── package.json     # Node.js dependencies
+│   └── Dockerfile       # Docker สำหรับ backend
+├── frontend/
+│   ├── index.html       # หน้า Login
+│   ├── register.html    # หน้าสมัครสมาชิก
+│   ├── dashboard.html   # หน้า Dashboard หลัก
+│   ├── pond.html        # หน้าจัดการบ่อกุ้ง
+│   ├── water.html       # หน้าบันทึกคุณภาพน้ำ
+│   ├── feeding.html     # หน้าบันทึกการให้อาหาร
+│   ├── growth.html      # หน้าติดตามการเจริญเติบโต
+│   ├── script.js        # JavaScript หลัก
+│   ├── login.js         # JavaScript สำหรับ Login
+│   └── style.css        # CSS stylesheet
+└── mysql-init/
+    └── init.sql         # SQL สำหรับสร้างฐานข้อมูลและข้อมูลตัวอย่าง
+```
+---
+
+## 📝 หมายเหตุ
+ 
+- ระบบนี้พัฒนาเพื่อการศึกษา ยังไม่มีการเข้ารหัสรหัสผ่าน (Production ควรใช้ bcrypt)
+- Backend เชื่อมต่อ MySQL ที่ `localhost` ด้วย user `root` password `1234`
+- รองรับการเชื่อมต่อกับอุปกรณ์ IoT ผ่าน `device_id` ในตาราง `environment_logs`
+
+---
 
 ## 👥 ทีมพัฒนา (Development Team)
 โปรเจกต์นี้เป็นส่วนหนึ่งของวิชา ICT22467 - ระบบปฏิบัติการ (Operating System) * มหาวิทยาลัยศรีปทุม (Sripatum University)
