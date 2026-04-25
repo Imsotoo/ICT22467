@@ -35,6 +35,7 @@ cd ICT22467-Giant-Freshwater-Praw
 
 ### ขั้นตอนที่ 2 - ตั้งค่าไฟล์ .env
 สร้างไฟล์ .env ในโฟลเดอร์หลัก และกำหนดค่าพื้นฐานดังนี้:
+```bash
 PORT=3000
 DB_HOST= mysql
 DB_PORT= 3307
