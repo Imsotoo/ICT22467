@@ -28,17 +28,17 @@
 ### 📥 ขั้นตอนที่ 1 - Clone โปรเจค
 
 ```bash
-git clone [https://github.com/your-username/ProjectSmartFram.git](https://github.com/your-username/ProjectSmartFram.git)
+git clone [)
 cd ProjectSmartFram
 
 ขั้นตอนที่ 2 - ตั้งค่าไฟล์ .env
 สร้างไฟล์ .env ในโฟลเดอร์หลัก และกำหนดค่าพื้นฐานดังนี้:
 PORT=3000
 DB_HOST=mysql
-DB_PORT=3306
+DB_PORT=3307
 DB_USER=greenspace_user
-DB_PASSWORD=greenspace_pass
-DB_NAME=greenspace_db
+DB_PASSWORD=1234
+DB_NAME=shrimp_db
 JWT_SECRET=ใส่รหัสลับของคุณที่นี่
 
 ขั้นตอนที่ 3 - รันระบบ (Docker Compose)
