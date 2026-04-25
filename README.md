@@ -30,7 +30,9 @@
 ```bash
 git clone (https://github.com/Imsotoo/ICT22467-Giant-Freshwater-Praw.git)
 cd ICT22467-Giant-Freshwater-Praw
+
 ---
+
 ### ขั้นตอนที่ 2 - ตั้งค่าไฟล์ .env
 สร้างไฟล์ .env ในโฟลเดอร์หลัก และกำหนดค่าพื้นฐานดังนี้:
 PORT=3000
@@ -40,7 +42,9 @@ DB_USER= user
 DB_PASSWORD= 1234
 DB_NAME= shrimp_db
 JWT_SECRET= ใส่รหัสลับของคุณที่นี่
+
 ---
+
 ### ขั้นตอนที่ 3. ติดตั้ง dependencies และรัน backend**
  
 ```bash
@@ -59,6 +63,7 @@ cd backend
 docker build -t shrimp-backend .
 docker run -p 5000:5000 shrimp-backend
 ```
+---
 
 ## 👥 ทีมพัฒนา (Development Team)
 โปรเจกต์นี้เป็นส่วนหนึ่งของวิชา ICT22467 - ระบบปฏิบัติการ (Operating System) * มหาวิทยาลัยศรีปทุม (Sripatum University)
