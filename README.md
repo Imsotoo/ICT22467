@@ -28,24 +28,38 @@
 ### 📥 ขั้นตอนที่ 1 - Clone โปรเจค
 
 ```bash
-git clone [https://github.com/Imsotoo/ICT22467.git)
-cd ProjectSmartFram
+git clone (https://github.com/Imsotoo/ICT22467-Giant-Freshwater-Praw.git)
+cd ICT22467-Giant-Freshwater-Praw
 
 ขั้นตอนที่ 2 - ตั้งค่าไฟล์ .env
 สร้างไฟล์ .env ในโฟลเดอร์หลัก และกำหนดค่าพื้นฐานดังนี้:
 PORT=3000
-DB_HOST=mysql
-DB_PORT=3307
-DB_USER=greenspace_user
-DB_PASSWORD=1234
-DB_NAME=shrimp_db
-JWT_SECRET=ใส่รหัสลับของคุณที่นี่
+DB_HOST= mysql
+DB_PORT= 3307
+DB_USER= user
+DB_PASSWORD= 1234
+DB_NAME= shrimp_db
+JWT_SECRET= ใส่รหัสลับของคุณที่นี่
 
-ขั้นตอนที่ 3 - รันระบบ (Docker Compose)
-เปิด Terminal แล้วรันคำสั่งด้านล่างนี้ เพื่อสร้างและเปิดใช้งาน Backend และ Database ไปพร้อมๆ กัน:
-Bash
-docker compose up -d --build
+ขั้นตอนที่ 3. ติดตั้ง dependencies และรัน backend**
+ 
+```bash
+cd backend
+npm install
+node server.js
+```
+Backend จะรันที่ `http://localhost:5000`
+
 ---
+
+ขั้นตอนที่ 4 รันด้วย Docker
+ เปิด Terminal แล้วรันคำสั่งด้านล่างนี้ เพื่อสร้างและเปิดใช้งาน Backend และ Database ไปพร้อมๆ กัน:
+```bash
+cd backend
+docker build -t shrimp-backend .
+docker run -p 5000:5000 shrimp-backend
+```
+
 ## 👥 ทีมพัฒนา (Development Team)
 โปรเจกต์นี้เป็นส่วนหนึ่งของวิชา ICT22467 - ระบบปฏิบัติการ (Operating System) * มหาวิทยาลัยศรีปทุม (Sripatum University)
 67112987 ณัฐภัทร เอิบอาบ
