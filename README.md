@@ -4,7 +4,6 @@
 > รองรับการดูข้อมูลเซ็นเซอร์แบบ Real-time และการจัดการข้อมูลผ่าน Dashboard
 #### 🔗 [ดูสไลด์นำเสนอโปรเจกต์ (Canva) คลิกที่นี่](Link canva -->https://canva.link/4o4uyfp303cv9ow Link FullVDO -->https://youtu.be/N-AGnE8ZrVk Link ShortVDO --> https://www.tiktok.com/@warmhuggy/video/7631618096813395218?is_from_webapp=1&sender_device=pc
 
-
 ---
 ## 🖥️ Tech Stack
 
@@ -15,6 +14,37 @@
 | **Frontend** | HTML5, CSS3, JavaScript , Chart.js |
 | **Infrastructure**| Docker, Docker Compose |
 | **Hardware/IoT** | ESP32, เซ็นเซอร์วัดคุณภาพน้ำ, อุณหภูมิ |
+
+---
+## ⚙️ การติดตั้ง (Setup Guide)
+
+### ✅ สิ่งที่ต้องมีก่อน
+
+- [Docker Desktop](https://www.docker.com/products/docker-desktop/) (สำหรับรันเซิร์ฟเวอร์จำลอง)
+- Git สำหรับดึงโค้ด
+
+---
+
+### 📥 ขั้นตอนที่ 1 - Clone โปรเจค
+
+```bash
+git clone [https://github.com/your-username/ProjectSmartFram.git](https://github.com/your-username/ProjectSmartFram.git)
+cd ProjectSmartFram
+
+ขั้นตอนที่ 2 - ตั้งค่าไฟล์ .env
+สร้างไฟล์ .env ในโฟลเดอร์หลัก และกำหนดค่าพื้นฐานดังนี้:
+PORT=3000
+DB_HOST=mysql
+DB_PORT=3306
+DB_USER=greenspace_user
+DB_PASSWORD=greenspace_pass
+DB_NAME=greenspace_db
+JWT_SECRET=ใส่รหัสลับของคุณที่นี่
+
+ขั้นตอนที่ 3 - รันระบบ (Docker Compose)
+เปิด Terminal แล้วรันคำสั่งด้านล่างนี้ เพื่อสร้างและเปิดใช้งาน Backend และ Database ไปพร้อมๆ กัน:
+Bash
+docker compose up -d --build
 ---
 ## 👥 ทีมพัฒนา (Development Team)
 โปรเจกต์นี้เป็นส่วนหนึ่งของวิชา ICT22467 - ระบบปฏิบัติการ (Operating System) * มหาวิทยาลัยศรีปทุม (Sripatum University)
