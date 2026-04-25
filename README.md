@@ -104,11 +104,11 @@ docker run -p 5000:5000 shrimp-backend
 ---
 
 ### ขั้นตอนที่ 5 - การเข้าใช้งาน
-```bash
-เมื่อระบบทำงานสมบูรณ์แล้ว สามารถเข้าถึงบริการต่างๆ ได้ตามช่องทางนี้:
-Web Dashboard (หน้าเว็บหลัก): เปิดไฟล์ index.html หรือเข้าผ่าน http://localhost:5000
-ระบบจัดการฐานข้อมูล (phpMyAdmin): เข้าผ่าน http://localhost:8080
-```
+| บริการ | URL |
+| :--- | :--- |
+| **Web Dashboard** | http://localhost:5000 |
+| **phpMyAdmin** | http://localhost:8080 |
+
 ---
 
 ## 👤 Account สำหรับ Login
