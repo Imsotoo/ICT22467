@@ -1,6 +1,8 @@
-# Giant Freshwater Prawn Farm Management
-ระบบจัดการฟาร์มกุ้งก้ามกราม
-## ภาพรวมระบบ
+# 🦐Giant Freshwater Prawn Farm Management
+(ระบบจัดการฟาร์มกุ้งก้ามกราม)
+
+>ระบบจัดการกุ้งก้ามกรามอัจฉริยะ (Smart Farm) 
+> รองรับการดูข้อมูลเซ็นเซอร์แบบ Real-time และการจัดการข้อมูลผ่าน Dashboard
 
 ---
 ## 👥 ทีมพัฒนา
