@@ -30,8 +30,8 @@
 ```bash
 git clone (https://github.com/Imsotoo/ICT22467-Giant-Freshwater-Praw.git)
 cd ICT22467-Giant-Freshwater-Praw
-
-ขั้นตอนที่ 2 - ตั้งค่าไฟล์ .env
+---
+### ขั้นตอนที่ 2 - ตั้งค่าไฟล์ .env
 สร้างไฟล์ .env ในโฟลเดอร์หลัก และกำหนดค่าพื้นฐานดังนี้:
 PORT=3000
 DB_HOST= mysql
@@ -40,8 +40,8 @@ DB_USER= user
 DB_PASSWORD= 1234
 DB_NAME= shrimp_db
 JWT_SECRET= ใส่รหัสลับของคุณที่นี่
-
-ขั้นตอนที่ 3. ติดตั้ง dependencies และรัน backend**
+---
+### ขั้นตอนที่ 3. ติดตั้ง dependencies และรัน backend**
  
 ```bash
 cd backend
@@ -52,7 +52,7 @@ Backend จะรันที่ `http://localhost:5000`
 
 ---
 
-ขั้นตอนที่ 4 รันด้วย Docker
+### ขั้นตอนที่ 4 รันด้วย Docker
  เปิด Terminal แล้วรันคำสั่งด้านล่างนี้ เพื่อสร้างและเปิดใช้งาน Backend และ Database ไปพร้อมๆ กัน:
 ```bash
 cd backend
