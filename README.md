@@ -2,9 +2,9 @@
 
 > ระบบจัดการกุ้งก้ามกรามอัจฉริยะ (Smart Farm) 
 > รองรับการดูข้อมูลเซ็นเซอร์แบบ Real-time และการจัดการข้อมูลผ่าน Dashboard
-🔗 [ดูสไลด์นำเสนอโปรเจกต์ (Canva)]([canva](https://canva.link/4o4uyfp303cv9ow)) &nbsp;|&nbsp;
-🎥 [วิดีโอตัวเต็ม (Full VDO)](https://youtu.be/61h8lNIio6U) &nbsp;|&nbsp;
-📱 [วิดีโอสั้น (Short VDO)]([hzttps://vt.tiktok.com/ZS9et9dQV/](https://www.tiktok.com/@warmhuggy/video/7631618096813395218?is_from_webapp=1&sender_device=pc))
+🔗 [ดูสไลด์นำเสนอโปรเจกต์ (Canva)]((https://canva.link/4o4uyfp303cv9ow) &nbsp;|&nbsp;
+🎥 [วิดีโอตัวเต็ม (Full VDO)](https://www.youtube.com/watch?v=N-AGnE8ZrVk) &nbsp;|&nbsp;
+📱 [วิดีโอสั้น (Short VDO)](https://www.tiktok.com/@warmhuggy/video/7631618096813395218?is_from_webapp=1&sender_device=pc))
 
 ---
 ## 🖥️ Tech Stack
