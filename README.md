@@ -2,7 +2,9 @@
 
 > ระบบจัดการกุ้งก้ามกรามอัจฉริยะ (Smart Farm) 
 > รองรับการดูข้อมูลเซ็นเซอร์แบบ Real-time และการจัดการข้อมูลผ่าน Dashboard
-#### 🔗 [ดูสไลด์นำเสนอโปรเจกต์ (Canva) คลิกที่นี่](Link canva -->https://canva.link/4o4uyfp303cv9ow Link FullVDO -->https://youtu.be/N-AGnE8ZrVk Link ShortVDO --> https://www.tiktok.com/@warmhuggy/video/7631618096813395218?is_from_webapp=1&sender_device=pc
+🔗 [ดูสไลด์นำเสนอโปรเจกต์ (Canva)](https://canva.link/a4iad7hhi1i5vl6) &nbsp;|&nbsp;
+🎥 [วิดีโอตัวเต็ม (Full VDO)](https://youtu.be/61h8lNIio6U) &nbsp;|&nbsp;
+📱 [วิดีโอสั้น (Short VDO)]([hzttps://vt.tiktok.com/ZS9et9dQV/](https://www.tiktok.com/@warmhuggy/video/7631618096813395218?is_from_webapp=1&sender_device=pc))
 
 ---
 ## 🖥️ Tech Stack
@@ -115,8 +117,8 @@ docker run -p 5000:5000 shrimp-backend
 
 | Username                   | Password    | Role     | สิทธิ์                 |
 | -------------------------- | ----------- | -------- | ---------------------- |
-| `admin`                | `1234`  | ADMIN  | จัดการทุกส่วนในระบบ |
-| `ice` | `123` | staff    | จัดการเพิ่มข้อมุลการให้อาหาร,เช็คข้อมูล    |
+| `admin`                | `1234`  | OWNER  | จัดการทุกส่วนในระบบ |
+| `ice` | `123` | MEMBER    | จัดการเพิ่มข้อมุลการให้อาหาร,เช็คข้อมูล    |
 
 ---
 
@@ -135,7 +137,7 @@ docker run -p 5000:5000 shrimp-backend
 โปรเจกต์นี้เป็นส่วนหนึ่งของวิชา:
 - **ICT22467** — ระบบฐานข้อมูล (DataBase)
 - **CPE23567** — ระบบปฏิบัติการ (Operating System)
-- 
+
 | รหัสนักศึกษา | ชื่อ |
 | :--- | :--- |
 | 67112987 | ณัฐภัทร เอิบอาบ|
