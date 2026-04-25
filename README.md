@@ -28,7 +28,7 @@
 ### 📥 ขั้นตอนที่ 1 - Clone โปรเจค
 
 ```bash
-git clone [)
+git clone [https://github.com/Imsotoo/ICT22467.git)
 cd ProjectSmartFram
 
 ขั้นตอนที่ 2 - ตั้งค่าไฟล์ .env
