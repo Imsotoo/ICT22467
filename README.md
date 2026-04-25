@@ -8,6 +8,13 @@
 ---
 ## 🖥️ Tech Stack
 
+| ส่วน | เทคโนโลยี |
+| :--- | :--- |
+| **Backend** | Node.js (Express) |
+| **Database** | MySQL 8.0 |
+| **Frontend** | HTML5, CSS3, JavaScript , Chart.js |
+| **Infrastructure**| Docker, Docker Compose |
+| **Hardware/IoT** | ESP32, เซ็นเซอร์วัดคุณภาพน้ำ, อุณหภูมิ |
 ---
 ## 👥 ทีมพัฒนา (Development Team)
 โปรเจกต์นี้เป็นส่วนหนึ่งของวิชา ICT22467 - ระบบปฏิบัติการ (Operating System) * มหาวิทยาลัยศรีปทุม (Sripatum University)
